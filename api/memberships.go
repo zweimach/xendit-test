@@ -20,6 +20,19 @@ type ListMembersRequest struct {
 
 type ListMembersResponse []User
 
+// ListMembers godoc
+// @Summary List all members
+// @Description List all members
+// @ID list-members
+// @Tags Organizations
+// @Accept  json
+// @Produce  json
+// @Param login path string true "Login of the organization"
+// @Success 200 {object} ListMembersResponse
+// @Failure 400 {object} utils.ErrorResponse
+// @Failure 404 {object} utils.ErrorResponse
+// @Failure 500 {object} utils.ErrorResponse
+// @Router /orgs/{login}/members [get]
 func (h *Handler) ListMembers(c echo.Context) error {
 	errRes := utils.NewError()
 

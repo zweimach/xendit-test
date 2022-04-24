@@ -1,0 +1,198 @@
+basePath: /
+definitions:
+  api.Comment:
+    properties:
+      id:
+        type: integer
+      login:
+        type: string
+      text:
+        type: string
+    type: object
+  api.CreateCommentRequest:
+    properties:
+      comment:
+        type: string
+    required:
+    - comment
+    type: object
+  api.CreateCommentResponse:
+    properties:
+      id:
+        type: integer
+      login:
+        type: string
+      text:
+        type: string
+    type: object
+  api.User:
+    properties:
+      avatar_url:
+        type: string
+      followers:
+        type: integer
+      follows:
+        type: integer
+      id:
+        type: integer
+      login:
+        type: string
+      name:
+        type: string
+    type: object
+  utils.ErrorResponse:
+    properties:
+      errors:
+        items:
+          type: string
+        type: array
+    type: object
+host: localhost:3000
+info:
+  contact: {}
+  description: Xendit Test API
+  title: Xendit Test API
+  version: "1.0"
+paths:
+  /orgs/{login}/comments:
+    delete:
+      consumes:
+      - application/json
+      description: Delete all comments
+      operationId: delete-comments
+      parameters:
+      - description: Login of the organization
+        in: path
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Delete all comments
+      tags:
+      - Organizations
+    get:
+      consumes:
+      - application/json
+      description: List all comments
+      operationId: list-comments
+      parameters:
+      - description: Login of the organization
+        in: path
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/api.Comment'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: List all comments
+      tags:
+      - Organizations
+    post:
+      consumes:
+      - application/json
+      description: Create a comment
+      operationId: create-comment
+      parameters:
+      - description: Login of the organization
+        in: path
+        name: login
+        required: true
+        type: string
+      - description: Comment to create
+        in: body
+        name: comment
+        required: true
+        schema:
+          $ref: '#/definitions/api.CreateCommentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/api.CreateCommentResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: Create a comment
+      tags:
+      - Organizations
+  /orgs/{login}/members:
+    get:
+      consumes:
+      - application/json
+      description: List all members
+      operationId: list-members
+      parameters:
+      - description: Login of the organization
+        in: path
+        name: login
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/api.User'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/utils.ErrorResponse'
+      summary: List all members
+      tags:
+      - Organizations
+schemes:
+- http
+- https
+swagger: "2.0"

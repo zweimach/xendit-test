@@ -11,11 +11,23 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	_ "github.com/lib/pq"
+	echoSwagger "github.com/swaggo/echo-swagger"
 	"github.com/zweimach/xendit-test/api"
 	"github.com/zweimach/xendit-test/db"
+	_ "github.com/zweimach/xendit-test/docs"
 	"github.com/zweimach/xendit-test/utils"
 )
 
+// @title Xendit Test API
+// @version 1.0
+// @description Xendit Test API
+
+// @host localhost:3000
+// @BasePath /
+
+// @schemes http https
+// @produce	application/json
+// @consumes application/json
 func main() {
 	driver := os.Getenv("DB_DRIVER")
 	source := os.Getenv("DB_SOURCE")
@@ -30,6 +42,8 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Validator = utils.NewCustomValidator(validator.New())
 
+	e.GET("/swagger/*", echoSwagger.WrapHandler)
+
 	conn, err := sql.Open(driver, source)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -40,7 +54,7 @@ func main() {
 	h := api.NewHandler(context.Background(), db)
 	h.Register(e)
 
-	if err := e.Start(":1234"); err != nil {
+	if err := e.Start(":3000"); err != nil {
 		e.Logger.Fatal(err)
 	}
 }

@@ -16,11 +16,25 @@ type Comment struct {
 
 type CreateCommentRequest struct {
 	Comment string `json:"comment" validate:"required"`
-	Login   string `param:"login" validate:"required"`
+	Login   string `json:"-" param:"login" validate:"required"`
 }
 
 type CreateCommentResponse Comment
 
+// CreateComment godoc
+// @Summary Create a comment
+// @Description Create a comment
+// @ID create-comment
+// @Tags Organizations
+// @Accept  json
+// @Produce  json
+// @Param login path string true "Login of the organization"
+// @Param comment body CreateCommentRequest true "Comment to create"
+// @Success 201 {object} CreateCommentResponse
+// @Failure 400 {object} utils.ErrorResponse
+// @Failure 404 {object} utils.ErrorResponse
+// @Failure 500 {object} utils.ErrorResponse
+// @Router /orgs/{login}/comments [post]
 func (h *Handler) CreateComment(c echo.Context) error {
 	errRes := utils.NewError()
 
@@ -53,6 +67,19 @@ type ListCommentsRequest struct {
 
 type ListCommentsResponse []Comment
 
+// ListComments godoc
+// @Summary List all comments
+// @Description List all comments
+// @ID list-comments
+// @Tags Organizations
+// @Accept  json
+// @Produce  json
+// @Param login path string true "Login of the organization"
+// @Success 200 {object} ListCommentsResponse
+// @Failure 400 {object} utils.ErrorResponse
+// @Failure 404 {object} utils.ErrorResponse
+// @Failure 500 {object} utils.ErrorResponse
+// @Router /orgs/{login}/comments [get]
 func (h *Handler) ListComments(c echo.Context) error {
 	errRes := utils.NewError()
 
@@ -88,6 +115,18 @@ type DeleteCommentsRequest struct {
 	Login string `param:"login" validate:"required"`
 }
 
+// DeleteComments godoc
+// @Summary Delete all comments
+// @Description Delete all comments
+// @ID delete-comments
+// @Tags Organizations
+// @Accept  json
+// @Produce  json
+// @Param login path string true "Login of the organization"
+// @Success 200 "OK"
+// @Failure 404 {object} utils.ErrorResponse
+// @Failure 500 {object} utils.ErrorResponse
+// @Router /orgs/{login}/comments [delete]
 func (h *Handler) DeleteComments(c echo.Context) error {
 	errRes := utils.NewError()
 
