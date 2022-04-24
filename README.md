@@ -1,6 +1,6 @@
 # xendit-test
 
-# Usage
+## Usage
 
 Use Docker and Docker Compose to run the app:
 
