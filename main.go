@@ -7,6 +7,9 @@ import (
 	"os"
 
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/joho/godotenv/autoload"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -29,10 +32,9 @@ import (
 // @produce	application/json
 // @consumes application/json
 func main() {
-	driver := os.Getenv("DB_DRIVER")
 	source := os.Getenv("DB_SOURCE")
-	if driver == "" || source == "" {
-		log.Fatal("please provide DB_SOURCE and DB_DRIVER env variable")
+	if source == "" {
+		log.Fatal("please provide DB_SOURCE env variable")
 	}
 
 	e := echo.New()
@@ -44,7 +46,22 @@ func main() {
 
 	e.GET("/swagger/*", echoSwagger.WrapHandler)
 
-	conn, err := sql.Open(driver, source)
+	conn, err := sql.Open("postgres", source)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	driver, err := postgres.WithInstance(conn, &postgres.Config{})
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	m, err := migrate.NewWithDatabaseInstance("file://db/migrations", "postgres", driver)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	m.Up()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
