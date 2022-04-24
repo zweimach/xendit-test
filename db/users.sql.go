@@ -158,7 +158,7 @@ WHERE o.login = $1
     AND o.deleted_at IS NULL
     AND u.deleted_at IS NULL
     AND m.deleted_at IS NULL
-ORDER BY u.id
+ORDER BY u.followers DESC
 LIMIT $2
 OFFSET $3
 `
