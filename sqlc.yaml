@@ -6,3 +6,4 @@ packages:
     schema: "db/migrations/"
     queries: "db/queries/"
     emit_json_tags: false
+    emit_interface: true

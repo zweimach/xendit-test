@@ -9,18 +9,15 @@ import (
 
 type Handler struct {
 	ctx context.Context
-	db  *db.Queries
+	db  db.Querier
 }
 
-func NewHandler(ctx context.Context, db *db.Queries) *Handler {
+func NewHandler(ctx context.Context, db db.Querier) *Handler {
 	return &Handler{ctx, db}
 }
 
 func (h *Handler) Register(e *echo.Echo) {
 	orgs := e.Group("/orgs")
-	orgs.GET("", h.ListOrganizations)
-	orgs.GET("/:login", h.GetOrganization)
-	orgs.DELETE("/:login", h.DeleteOrganization)
 	orgs.GET("/:login/comments", h.ListComments)
 	orgs.POST("/:login/comments", h.CreateComment)
 	orgs.DELETE("/:login/comments", h.DeleteComments)
